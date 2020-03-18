@@ -1,0 +1,27 @@
+{
+	"pluginName": "FanFou",
+	"description": "饭否",
+	"version": "0.0.1",
+	"main":"",
+	"preload":"preload.js",
+	"logo": "./images/logo.png",
+	"platform": ["win32", "darwin", "linux"],
+	"author":"稀饭",
+	"features": [
+	    {
+			"code": "ff",
+			"explain": "发饭",
+	        "cmds":["ff"]
+		},
+		{
+			"code": "fflogin",
+			"explain": "登录",
+	        "cmds":["fflogin"]
+		},
+		{
+			"code": "ffconfig",
+			"explain": "配置",
+	        "cmds":["ffconfig"]
+		}
+	]
+}
