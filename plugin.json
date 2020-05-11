@@ -1,27 +1,16 @@
 {
-	"pluginName": "FanFou",
-	"description": "饭否",
+	"pluginName": "饭否",
+	"description": "utools 饭否插件",
+	"main": "./dist/index.html",
+	"preload":"./preload.js",
+	"logo":"./src/assets/logo.png",
 	"version": "0.0.1",
-	"main":"",
-	"preload":"preload.js",
-	"logo": "./images/logo.png",
-	"platform": ["win32", "darwin", "linux"],
-	"author":"稀饭",
+	"author": "稀饭",
 	"features": [
-	    {
-			"code": "ff",
-			"explain": "发饭",
-	        "cmds":["ff"]
-		},
 		{
-			"code": "fflogin",
-			"explain": "登录",
-	        "cmds":["fflogin"]
-		},
-		{
-			"code": "ffconfig",
-			"explain": "配置",
-	        "cmds":["ffconfig"]
+		  "code": "ff",
+		  "explain": "饭否",
+			"cmds":["饭否"]
 		}
 	]
 }

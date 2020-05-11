@@ -1,22 +1,24 @@
-# uTools 饭否插件
+# utools-fanfou
 
-## 功能
+## Project setup
+```
+yarn install
+```
 
-### ff
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
 
-- 显示 tl 最近10条消息
-- 发饭
+### Compiles and minifies for production
+```
+yarn build
+```
 
-### fflogin
+### Lints and fixes files
+```
+yarn lint
+```
 
-- 登录饭否账户
-
-### ffconfig
-
-- 配置 key 及 secret 
-- 可至 http://fanfou.com/apps 申请
-
-## 关于
-
-- 作者：稀饭
-- 饭否昵称：稀饭233
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

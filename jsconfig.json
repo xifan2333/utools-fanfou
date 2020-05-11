@@ -1,0 +1,11 @@
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "typeAcquisition": {
+    "include": [
+      "fanfou-sdk",
+      "Vue" // 填你想要提示的代码库名字
+    ]
+  }
+}
