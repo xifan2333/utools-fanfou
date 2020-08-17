@@ -1,16 +1,21 @@
 {
-	"pluginName": "饭否",
-	"description": "utools 饭否插件",
-	"main": "./dist/index.html",
-	"preload":"./preload.js",
-	"logo":"./src/assets/logo.png",
-	"version": "0.0.1",
-	"author": "稀饭",
-	"features": [
-		{
-		  "code": "ff",
-		  "explain": "饭否",
-			"cmds":["饭否"]
-		}
-	]
+  "pluginName": "饭否",
+  "description": "utools 饭否插件",
+  "main": "./dist/index.html",
+  "preload": "./preload.js",
+  "logo": "./dist/logo.png",
+  "version": "1.0.0",
+  "author": "稀饭",
+  "features": [
+    {
+      "code": "ff",
+      "explain": "发送消息到饭否",
+      "cmds": ["饭否",{
+		"type": "over",
+		"label": "饭否",
+		"minLength": 1,
+		"maxLength": 140
+	  }]
+    }
+  ]
 }

@@ -1,7 +1,9 @@
 /* eslint-disable no-undef */
 const Fanfou = require("fanfou-sdk");
 const { encrypt, decrypt } = require("./utils/aes");
-const fs = require('fs')
+const fs = require("fs");
+const moment = require("moment");
+moment.locale("zh-cn");
 var _setImmediate = setImmediate;
 process.once("loaded", function() {
   global.setImmediate = _setImmediate;
@@ -52,18 +54,25 @@ class User {
     return res;
   }
   async postStatus(status) {
-    await this.ff.post("/statuses/update", { status: status });
+    await this.ff.post("/statuses/update", status);
   }
-  async postPhoto(status = "", photo) {
-    if (status != "") {
-      await this.ff.post("/photos/upload", { photo:fs.createReadStream(photo), status: status });
-    }
-    if (status == "") {
-      await this.ff.post("/photos/upload", { photo:fs.createReadStream(photo) });
-    }
+  async postPhoto(photo, status = "") {
+    await this.ff.post("/photos/upload", {
+      photo: fs.createReadStream(photo),
+      status: status,
+    });
   }
-  async getTimeline(opt){
-     return await this.ff.get('/statuses/home_timeline',opt)
+  async getTimeline(opt) {
+    return await this.ff.get("/statuses/home_timeline", opt);
+  }
+  formatDate(date) {
+    return moment(new Date(date)).fromNow();
+  }
+  async getMentions(opt){
+    return await this.ff.get("/statuses/mentions", opt);
+  }
+  async search(opt){
+    return await this.ff.get("/statuses/mentions", opt);
   }
 }
 

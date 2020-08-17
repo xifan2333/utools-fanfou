@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Mentions from "../views/Mentions.vue";
 import Main from "../views/Main.vue";
-import Tags from "../views/Tags.vue";
 import Search from "../views/Search.vue";
 
 
@@ -18,7 +17,6 @@ const routes = [
     children: [
       { path: "/mentions", component: Mentions },
       { path: "/home", component: Home },
-      { path: "/tags", component: Tags },
       { path: "/search", component: Search },
     ],
   },
