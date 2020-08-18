@@ -76,6 +76,7 @@
                     label="密码"
                     required
                     type="password"
+                    @keyup.enter="loginSubmit"
                   ></v-text-field>
                   <v-btn color="success" class="mr-4" @click="loginSubmit"
                     >登录</v-btn

@@ -72,7 +72,7 @@ class User {
     return await this.ff.get("/statuses/mentions", opt);
   }
   async search(opt){
-    return await this.ff.get("/statuses/mentions", opt);
+    return await this.ff.get("/search/user_timeline", opt);
   }
 }
 

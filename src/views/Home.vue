@@ -140,6 +140,18 @@ export default {
       },
     };
   },
+  watch: {
+      ["dialog.show"](val) {
+      if (val == false) {
+        this.photoUpload = true;
+        this.dialog.title = "你在做什么？";
+        this.image.path = "";
+        this.image.value = "";
+        this.msg.value = "";
+        this.status = {};
+      }
+    }
+  },
   methods: {
     chooseImage() {
       this.image.path = this.$utools.showOpenDialog({
@@ -163,14 +175,9 @@ export default {
         this.$message.error(e.message);
       }
       this.dialog.show = !this.dialog.show;
-      this.photoUpload = true;
-      this.image.path = "";
-      this.image.value = "";
-      this.msg.value = "";
-      this.status = {};
       this.fetch();
-      this.goTop();
     },
+
     repost(status) {
       this.dialog.show = true;
       this.photoUpload = false;
@@ -179,13 +186,16 @@ export default {
       this.status.repost_user_id = status.user.unique_id;
       this.msg.value = `转 @${status.user.screen_name} ${status.plain_text} `;
     },
+
     reply(status) {
       this.dialog.show = true;
+      this.photoUpload = false;
       this.dialog.title = "回复";
       this.status.in_reply_to_status_id = status.id;
       this.status.in_reply_to_user_id = status.user.unique_id;
       this.msg.value = `@${status.user.screen_name} `;
     },
+
     async fetch() {
       this.isReady = true;
       try {
@@ -227,28 +237,31 @@ export default {
     goTop() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
+
     fromNow(date) {
       return this.$user.formatDate(date);
     },
+
     showImage(img) {
       this.currentImage = img;
       this.imageDialog = true;
     },
   },
   async created() {
-    this.fetch()
+    this.fetch();
     this.$utools.onPluginEnter(async ({ code, type, payload }) => {
       if (code == "ff" && type == "over") {
         try {
           await this.$user.postStatus({ status: payload });
           this.$message.success("发送成功");
-          this.fetch()
+          this.fetch();
         } catch (e) {
           this.$message.error(e.message);
         }
       }
     });
   },
+
   async mounted() {
     this.touchBottom();
   },

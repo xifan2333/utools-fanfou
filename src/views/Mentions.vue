@@ -5,7 +5,7 @@
 		</div>
 		<div class="dialog">
 			<v-row justify="center dialog">
-				<v-dialog v-model="dialog.show" max-width="500px">
+				<v-dialog v-model="dialog.show" max-width="400px">
 					<v-card>
 						<v-card-title color="blue">
 							<small>{{dialog.title}}</small>
@@ -73,7 +73,7 @@
 					</v-btn>
 				</v-card-actions>
 			</v-card>
-			<v-dialog v-model="imageDialog" max-width="400px">
+			<v-dialog v-model="imageDialog" max-width="500px">
 				<v-card>
 					<v-img :src="currentImage"></v-img>
 				</v-card>

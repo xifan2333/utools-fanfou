@@ -11,13 +11,14 @@
     "core-js": "^3.6.4",
     "crypto-js": "^4.0.0",
     "fanfou-sdk": "^4.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "moment": "^2.25.3",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
     "vuetify": "^2.2.27"
   },
   "devDependencies": {
+    "@mdi/font": "^5.5.55",
     "@mdi/js": "^5.5.55",
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-eslint": "~4.3.0",
