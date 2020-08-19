@@ -8,6 +8,7 @@ Vue.use(message);
 Vue.config.productionTip = false
 Vue.prototype.$user = window.user
 Vue.prototype.$utools = window.utools
+Vue.prototype.$utils = window.utils
 
 
 new Vue({

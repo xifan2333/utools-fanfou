@@ -17,7 +17,7 @@
 							<v-btn fab dark small color="green" v-on="on">
 								<v-icon>mdi-pencil</v-icon>
 							</v-btn>
-							<v-btn fab dark small color="red" @click="fetch">
+							<v-btn fab dark small color="red" @click="fetch()">
 								<v-icon>mdi-refresh</v-icon>
 							</v-btn>
 						</v-speed-dial>
@@ -36,6 +36,8 @@
 										v-model="msg.value"
 										auto-grow
 										clearable
+                    @keydown.prevent.enter.exact="submit()"
+                    @keyup.ctrl.enter="lines()"
 									></v-textarea>
 								</v-row>
 								<v-row v-if="photoUpload">
@@ -46,6 +48,7 @@
 										v-model="image.value"
 										prepend-icon="mdi-camera"
 										accept="image/*"
+                    @keydown.prevent.enter.exact="submit()"
 									></v-text-field>
 								</v-row>
 							</v-container>
@@ -62,39 +65,39 @@
 		<div class="timeline" v-if="timeline">
 			<v-card
 				class="ms-auto status mb-4 ml-5 mr-5"
-				v-for="(status, index) in timeline"
+				v-for="(t, index) in timeline"
 				:index="`menu-item-${index}`"
-				:key="`menu-item-${status.id}}`"
+				:key="`menu-item-${t.id}}`"
 			>
 				<v-list-item>
 					<v-list-item-avatar>
-						<v-img :src="status.user.profile_image_url"></v-img>
+						<v-img :src="t.user.profile_image_url"></v-img>
 					</v-list-item-avatar>
 					<v-list-item-content>
-						<v-list-item-title>{{ status.user.name }}</v-list-item-title>
+						<v-list-item-title>{{ t.user.name }}</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
 				<div class="d-flex flex-no-wrap justify-space-between">
 					<div>
-						<v-card-subtitle v-html="status.text"></v-card-subtitle>
+						<v-card-subtitle v-html="t.text"></v-card-subtitle>
 					</div>
 					<v-avatar
-						v-if="status.photo"
+						v-if="t.photo"
 						class="mr-4"
 						size="125"
 						tile
-						@click.stop="showImage(status.photo.originurl)"
+						@click.stop="showImage(t.photo.originurl)"
 					>
-						<v-img :src="status.photo.originurl"></v-img>
+						<v-img :src="t.photo.originurl"></v-img>
 					</v-avatar>
 				</div>
 				<v-card-actions>
-					<span class="fromNow">{{ fromNow(status.created_at) }}</span>
+					<span class="fromNow">{{ fromNow(t.created_at) }}</span>
 					<v-spacer></v-spacer>
-					<v-btn icon @click="repost(status)">
+					<v-btn icon @click="repost(t)">
 						<v-icon>mdi-comment-arrow-left</v-icon>
 					</v-btn>
-					<v-btn icon @click="reply(status)">
+					<v-btn icon @click="reply(t)">
 						<v-icon>mdi-comment-account</v-icon>
 					</v-btn>
 				</v-card-actions>
@@ -111,8 +114,6 @@
 	</div>
 </template>
 <script>
-// @ is an alias to /src
-
 export default {
   data() {
     return {
@@ -141,7 +142,7 @@ export default {
     };
   },
   watch: {
-      ["dialog.show"](val) {
+    ["dialog.show"](val) {
       if (val == false) {
         this.photoUpload = true;
         this.dialog.title = "你在做什么？";
@@ -150,7 +151,7 @@ export default {
         this.msg.value = "";
         this.status = {};
       }
-    }
+    },
   },
   methods: {
     chooseImage() {
@@ -159,21 +160,28 @@ export default {
         properties: ["openFile"],
       })[0];
       this.image.value = this.image.path
-        ? this.image.path
-            .replace(/\\/g, "/")
-            .split("/")
-            .pop()
+        ? this.image.path.replace(/\\/g, "/").split("/").pop()
         : "";
     },
 
     async submit() {
-      this.status.status = this.msg.value;
-      try {
-        await this.$user.postStatus(this.status);
-        this.$message.success("发送成功");
-      } catch (e) {
-        this.$message.error(e.message);
+      if (this.image.value) {
+        try {
+          await this.$user.postPhoto(this.image.path, this.msg.value);
+          this.$message.success("发送成功");
+        } catch (e) {
+          this.$message.error(e.message);
+        }
+      } else {
+        this.status.status = this.msg.value;
+        try {
+          await this.$user.postStatus(this.status);
+          this.$message.success("发送成功");
+        } catch (e) {
+          this.$message.error(e.message);
+        }
       }
+
       this.dialog.show = !this.dialog.show;
       this.fetch();
     },
@@ -194,6 +202,9 @@ export default {
       this.status.in_reply_to_status_id = status.id;
       this.status.in_reply_to_user_id = status.user.unique_id;
       this.msg.value = `@${status.user.screen_name} `;
+    },
+    lines(){
+      this.msg.value+="\n"
     },
 
     async fetch() {
@@ -239,7 +250,7 @@ export default {
     },
 
     fromNow(date) {
-      return this.$user.formatDate(date);
+      return this.$utils.formatDate(date);
     },
 
     showImage(img) {
@@ -259,11 +270,30 @@ export default {
           this.$message.error(e.message);
         }
       }
+      if (code == "ff" && type == "img") {
+        this.$utils.writeTempPng(payload)
+        this.dialog.show = true
+        this.image.path = this.$utils.tmpPath
+        this.image.value = "tmp.png"
+      }
+      if (code == "ff" && type == "files") {
+        this.dialog.show = true
+        this.image.path = payload[0].path
+        this.image.value = payload[0].name
+      }
     });
   },
 
   async mounted() {
     this.touchBottom();
+    window.addEventListener("keydown",(event)=>{
+		if(event.key=="F5"){
+			this.fetch()
+		}
+		if(event.key == "F1"){
+			this.dialog.show=true
+		}
+	})
   },
 };
 </script>
